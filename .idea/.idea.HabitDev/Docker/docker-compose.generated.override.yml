@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  habitdev:
+    build:
+      context: "C:\\Users\\khali\\RiderProjects\\HabitDev"
+      dockerfile: "HabitDev/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/HabitDev.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "habitdev:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\khali\\RiderProjects\\HabitDev\\HabitDev:/app:rw"
+    - "C:\\Users\\khali\\RiderProjects\\HabitDev:/src:rw"
+    - "C:\\Users\\khali\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

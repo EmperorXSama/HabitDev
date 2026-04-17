@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\khali\\RiderProjects\\HabitDev\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8C0FC8F2-BCF1-4D92-ADB1-52A7CEF4488A}|HabitDev\\HabitDev.csproj|c:\\users\\khali\\riderprojects\\habitdev\\habitdev\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{8C0FC8F2-BCF1-4D92-ADB1-52A7CEF4488A}|HabitDev\\HabitDev.csproj|solutionrelative:habitdev\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\khali\\RiderProjects\\HabitDev\\HabitDev\\Dockerfile",
+              "RelativeDocumentMoniker": "HabitDev\\Dockerfile",
+              "ToolTip": "C:\\Users\\khali\\RiderProjects\\HabitDev\\HabitDev\\Dockerfile",
+              "RelativeToolTip": "HabitDev\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-17T09:40:34.049Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
