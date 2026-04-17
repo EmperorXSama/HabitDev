@@ -19,6 +19,17 @@ services:
     depends_on:
       - otel-collector
   
+  #───Database ──────────────────────────────────────────────
+  devhabit.postgres:
+    image: postgres:17.2
+    environment:
+      POSTGRES_DB: devhabit
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./.containers/postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
   
   # ─── OTel Collector ──────────────────────────────────────────────
   otel-collector:
@@ -72,3 +83,4 @@ services:
       - prometheus
       - loki
       - jaeger
+  

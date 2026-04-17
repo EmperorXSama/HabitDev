@@ -1,5 +1,9 @@
 ﻿using System.Reflection;
 using HabitDev.Configurations;
+using HabitDev.Database;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -14,7 +18,8 @@ public static  class DependencyInjection
         IHostEnvironment environment) =>
         services
             .AddConfigurationOptions(configuration)
-            .AddOpenTelemetry(configuration, environment);
+            .AddOpenTelemetry(configuration, environment)
+            .AddDatabase(configuration);
 
 
     private static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration,
@@ -64,7 +69,7 @@ public static  class DependencyInjection
                     })
 
                     .AddEntityFrameworkCoreInstrumentation()
-
+                    .AddNpgsql()
                     .AddOtlpExporter(opts =>
                     {
                         opts.Endpoint = new Uri(otlpConfig.Endpoint);
@@ -114,7 +119,18 @@ public static  class DependencyInjection
         
         return services;
     }
-    
+
+
+    private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+    {
+        string connectionString = configuration.GetConnectionString("Database");
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(connectionString,
+                npgsqlOptions => npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName))
+        );
+        return services;
+    }
     
     private  static IServiceCollection AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
     {
