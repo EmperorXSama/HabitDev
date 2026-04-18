@@ -1,5 +1,6 @@
 using HabitDev;
 using HabitDev.Extensions;
+using HabitDev.Middleware;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddProblemDetails(options =>
         context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
     };
 });
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
 builder.Services.AddApiServices(builder.Configuration, builder.Environment);
 
@@ -27,7 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.UseExceptionHandler();
 app.MapControllers();
 
 await app.RunAsync();
