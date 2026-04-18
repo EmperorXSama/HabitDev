@@ -17,5 +17,6 @@ public sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
         builder.Property(t => t.Description).HasMaxLength(500);
 
         builder.HasIndex(t => new { t.Name }).IsUnique();
+        
     }
 }

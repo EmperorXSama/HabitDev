@@ -1,4 +1,5 @@
-﻿using DevHabit.Api.DTOs.Habits;
+﻿using System.Data;
+using DevHabit.Api.DTOs.Habits;
 using HabitDev.Database.Entities;
 
 namespace HabitDev.DTOs.Habits;

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using FluentValidation;
 using HabitDev.Configurations;
 using HabitDev.Database;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,8 @@ public static  class DependencyInjection
         services
             .AddConfigurationOptions(configuration)
             .AddOpenTelemetry(configuration, environment)
-            .AddDatabase(configuration);
+            .AddDatabase(configuration)
+            .AddValidators();
 
 
     private static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration,
@@ -117,7 +119,12 @@ public static  class DependencyInjection
         return services;
     }
 
-
+    private static IServiceCollection AddValidators(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssemblyContaining<Program>();
+        
+        return services;
+    }
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         string connectionString = configuration.GetConnectionString("Database");
