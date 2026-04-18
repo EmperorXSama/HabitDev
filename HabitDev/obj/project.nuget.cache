@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "EqCcMSdDIGA=",
+  "dgSpecHash": "wK4cKM4ntzA=",
   "success": true,
   "projectFilePath": "C:\\Users\\khali\\RiderProjects\\HabitDev\\HabitDev\\HabitDev.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\khali\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
+    "C:\\Users\\khali\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.1.1\\fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
     "C:\\Users\\khali\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\khali\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\9.0.15\\microsoft.aspnetcore.jsonpatch.9.0.15.nupkg.sha512",
     "C:\\Users\\khali\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\9.0.15\\microsoft.aspnetcore.mvc.newtonsoftjson.9.0.15.nupkg.sha512",

@@ -1,10 +1,13 @@
-﻿using HabitDev.Database;
+﻿using System.ComponentModel.DataAnnotations;
+using FluentValidation;
+using HabitDev.Database;
 using HabitDev.Database.Entities;
 using HabitDev.DTOs;
 using HabitDev.DTOs.Habits;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace HabitDev.Controllers;
 
@@ -29,20 +32,26 @@ public sealed  class HabitsController(ApplicationDbContext context) : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<HabitDto>> GetHabit(string id)
+    public async Task<ActionResult<DetailedHabit>> GetHabit(string id)
     {
-        HabitDto habit = await context.
+        DetailedHabit habit = await context.
             Habits
             .Where(h => h.Id == id)
-            .Select(HabitQueries.ProjectToDto())
+            .Select(HabitQueries.ProjectToDetailedDto())
             .FirstOrDefaultAsync();
 
         return habit == null ? NotFound() : Ok(habit);
     }
     
     [HttpPost]
-    public async Task<ActionResult<HabitDto>> CreateHabit( CreateHabitDto habitDto)
+    public async Task<ActionResult<HabitDto>> CreateHabit( CreateHabitDto habitDto,
+        [FromServices] IValidator<CreateHabitDto> validator)
     {
+        ValidationResult? validationResult = await validator.ValidateAsync(habitDto);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToDictionary());
+        }
         Habit habit = habitDto.ToEntity();
         context.Habits.Add(habit);
 

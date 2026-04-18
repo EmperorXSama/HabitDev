@@ -1,4 +1,4 @@
-﻿namespace DevHabit.Api.DTOs.Tags;
+﻿namespace HabitDev.DTOs.Tags;
 
 public sealed record CreateTagDto
 {

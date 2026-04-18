@@ -7,7 +7,13 @@ builder.Services.AddControllers(options =>
 { options.ReturnHttpNotAcceptable = true; })
 .AddNewtonsoftJson()
 .AddXmlSerializerFormatters();
-
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+    };
+});
 builder.Services.AddOpenApi();
 builder.Services.AddApiServices(builder.Configuration, builder.Environment);
 

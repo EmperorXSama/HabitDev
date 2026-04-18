@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
         <PackageReference Include="Microsoft.AspNetCore.JsonPatch" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
@@ -34,6 +36,10 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.Process" />
         <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
        
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\Application\" />
     </ItemGroup>
 
 </Project>
