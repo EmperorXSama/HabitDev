@@ -4,6 +4,7 @@ using HabitDev.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -49,45 +50,41 @@ public static  class DependencyInjection
             });
         
         
-       services.AddOpenTelemetry()
-            .ConfigureResource(r => r.AddService("OpenT.Api"))
+        services.AddOpenTelemetry()
+            .ConfigureResource(r => r
+                .AddService(
+                    serviceName: "HabitDev.Api",
+                    serviceVersion: serviceVersion,
+                    serviceInstanceId: instanceId)
+                .AddAttributes(new Dictionary<string, object>
+                {
+                    ["deployment.environment"] = environment.EnvironmentName,
+                    ["host.name"] = instanceId
+                }))
             .WithTracing(tracing =>
             {
                 tracing
-                    .SetResourceBuilder(resourceBuilder)
-
                     .AddAspNetCoreInstrumentation(opts =>
                     {
                         opts.RecordException = true;
-                        opts.Filter = ctx =>
-                            !ctx.Request.Path.StartsWithSegments("/health");
+                        opts.Filter = ctx => !ctx.Request.Path.StartsWithSegments("/health");
                     })
-
-                    .AddHttpClientInstrumentation(opts =>
-                    {
-                        opts.RecordException = true;
-                    })
-
+                    .AddHttpClientInstrumentation(opts => opts.RecordException = true)
                     .AddEntityFrameworkCoreInstrumentation()
                     .AddNpgsql()
                     .AddOtlpExporter(opts =>
                     {
                         opts.Endpoint = new Uri(otlpConfig.Endpoint);
-                        opts.Protocol =
-                            OpenTelemetry.Exporter
-                                .OtlpExportProtocol.Grpc;
+                        opts.Protocol = OtlpExportProtocol.Grpc;
                     });
             })
-
             .WithMetrics(metrics =>
             {
                 metrics
-                    .SetResourceBuilder(resourceBuilder)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation()
                     .AddProcessInstrumentation()
-
                     .AddOtlpExporter(opts =>
                     {
                         opts.Endpoint = new Uri(otlpConfig.Endpoint);

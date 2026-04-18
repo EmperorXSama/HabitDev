@@ -17,9 +17,11 @@ services:
     volumes:
       - ./https:/https:ro
     depends_on:
-      - otel-collector
-  
-  #───Database ──────────────────────────────────────────────
+      otel-collector:
+        condition: service_started
+      devhabit.postgres:
+        condition: service_healthy 
+
   devhabit.postgres:
     image: postgres:17.2
     environment:
@@ -30,6 +32,12 @@ services:
       - ./.containers/postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:                                      
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   
   # ─── OTel Collector ──────────────────────────────────────────────
   otel-collector:

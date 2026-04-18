@@ -53,6 +53,16 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.JsonPatch": {
+              "target": "Package",
+              "version": "[9.0.15, )",
+              "versionCentrallyManaged": true
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[9.0.15, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.14, )",
@@ -134,6 +144,8 @@
             }
           },
           "centralPackageVersions": {
+            "Microsoft.AspNetCore.JsonPatch": "9.0.15",
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "9.0.15",
             "Microsoft.AspNetCore.OpenApi": "9.0.14",
             "Microsoft.EntityFrameworkCore": "9.0.15",
             "Microsoft.EntityFrameworkCore.Tools": "9.0.15",

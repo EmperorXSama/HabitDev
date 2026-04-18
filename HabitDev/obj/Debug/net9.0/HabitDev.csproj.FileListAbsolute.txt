@@ -141,3 +141,8 @@ C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\tr\Microsoft.Cod
 C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\khali\RiderProjects\HabitDev\HabitDev\obj\Debug\net9.0\HabitDev.sourcelink.json
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Npgsql.OpenTelemetry.dll
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Newtonsoft.Json.dll
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
