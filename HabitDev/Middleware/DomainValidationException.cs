@@ -1,14 +1,16 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Trace;
 
 namespace HabitDev.Middleware;
 
-public sealed class ValidationExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
+public sealed class DomainValidationExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
 {
-    public async ValueTask<bool> TryHandleAsync(
-        HttpContext httpContext, 
-        Exception exception,
-        CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync
+        (HttpContext httpContext, 
+            Exception exception,
+            CancellationToken cancellationToken)
     {
         if (exception is not ValidationException validationException)
         {
@@ -20,9 +22,9 @@ public sealed class ValidationExceptionHandler(IProblemDetailsService problemDet
         {
             HttpContext = httpContext,
             Exception = exception,
-            ProblemDetails =
+            ProblemDetails = new ProblemDetails
             {
-                Detail = "One or more validation errors occurred",
+                Detail = "One or more errors occurred",
                 Status = StatusCodes.Status400BadRequest
             }
         };
@@ -30,11 +32,10 @@ public sealed class ValidationExceptionHandler(IProblemDetailsService problemDet
         var errors = validationException.Errors
             .GroupBy(e => e.PropertyName)
             .ToDictionary(
-
                 g => g.Key.ToLowerInvariant(),
-                g => g.Select(e => e.ErrorMessage).ToArray());
+                g => g.Select(e => e.ErrorMessage).ToArray()
+            );
         context.ProblemDetails.Extensions.Add("errors",errors);
-
         return await problemDetailsService.TryWriteAsync(context);
     }
 }

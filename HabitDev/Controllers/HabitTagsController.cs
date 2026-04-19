@@ -16,22 +16,30 @@ public class HabitTagsController(ApplicationDbContext  dbContext) : ControllerBa
     {
         Habit? habit = await dbContext.Habits
             .Include(h => h.HabitTags)
-            .SingleOrDefaultAsync(h => h.Id == habitId);
+            .FirstOrDefaultAsync(h => h.Id == habitId);
 
-        if (habit == null)
+        if (habit is null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Habit was not found",
+                Detail = $"A habit with id {habitId} was not found",
+                Extensions = new Dictionary<string, object?>
+                {
+                    ["habit-id"] = habitId
+                }
+            });
         }
 
-        var currentTagIds = habit.HabitTags.Select(ht => ht.TagId).ToHashSet();
-        if (currentTagIds.SetEquals(upsertHabitTags.TagIds))
+        var currentTags = habit.HabitTags.Select(ht => ht.TagId).ToHashSet();
+
+        if (currentTags.SetEquals(upsertHabitTags.TagIds))
         {
             return NoContent();
         }
 
         List<string> existingTagIds = await dbContext
-            .Tags
-            .Where(t => upsertHabitTags.TagIds.Contains(t.Id))
+            .Tags.Where(t => upsertHabitTags.TagIds.Contains(t.Id))
             .Select(t => t.Id)
             .ToListAsync();
 
@@ -41,15 +49,14 @@ public class HabitTagsController(ApplicationDbContext  dbContext) : ControllerBa
         }
 
         habit.HabitTags.RemoveAll(ht => !upsertHabitTags.TagIds.Contains(ht.TagId));
-
-        string[] tagIdsToAdd = upsertHabitTags.TagIds.Except(currentTagIds).ToArray();
-        habit.HabitTags.AddRange(tagIdsToAdd.Select(tagId => new HabitTag
+        string[] tagsToAdd = upsertHabitTags.TagIds.Except(currentTags).ToArray();
+        habit.HabitTags.AddRange(tagsToAdd.Select(t => new HabitTag
         {
             HabitId = habitId,
-            TagId = tagId,
+            TagId = t,
             CreatedAtUtc = DateTime.UtcNow
         }));
-
+        
         await dbContext.SaveChangesAsync();
         
         return NoContent();

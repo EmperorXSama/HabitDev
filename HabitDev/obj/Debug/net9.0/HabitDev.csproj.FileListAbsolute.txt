@@ -146,3 +146,5 @@ C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Microsoft.AspNet
 C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\FluentValidation.dll
+C:\Users\khali\RiderProjects\HabitDev\HabitDev\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll

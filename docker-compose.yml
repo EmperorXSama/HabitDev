@@ -10,6 +10,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - Otel__Endpoint=http://otel-collector:4317
+      - ConnectionStrings__Database=Host=devhabit.postgres;Database=devhabit;Username=postgres;Password=postgres
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
@@ -41,7 +42,7 @@ services:
   
   # ─── OTel Collector ──────────────────────────────────────────────
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.107.0
+    image: otel/opentelemetry-collector-contrib:latest
     command: ["--config=/etc/otel/config.yaml"]
     volumes:
       - ./otel/collector-config.yaml:/etc/otel/config.yaml
@@ -65,10 +66,13 @@ services:
   # ─── Prometheus (Metrics) ────────────────────────────────────────
   prometheus:
     image: prom/prometheus:v2.54.0
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-remote-write-receiver'   # 👈 add this
     volumes:
       - ./otel/prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
-      - "9090:9090"    # Prometheus UI
+      - "9090:9090"
 
   # ─── Loki (Logs) ─────────────────────────────────────────────────
   loki:
