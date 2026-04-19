@@ -8,7 +8,8 @@ public sealed class CreateTagDtoValidator : AbstractValidator<CreateTagDto>
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MinimumLength(3);
+            .MinimumLength(3)
+            .WithMessage($"a name cannot be empty");
 
         RuleFor(x => x.Description)
             .MaximumLength(50);
