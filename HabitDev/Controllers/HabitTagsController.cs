@@ -1,6 +1,7 @@
 ﻿using HabitDev.Database;
 using HabitDev.Database.Entities;
 using HabitDev.DTOs.HabitTags;
+using HabitDev.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

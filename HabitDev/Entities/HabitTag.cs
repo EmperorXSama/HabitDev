@@ -1,4 +1,6 @@
-﻿namespace HabitDev.Database.Entities;
+﻿using HabitDev.Entities;
+
+namespace HabitDev.Database.Entities;
 
 public sealed class HabitTag
 {

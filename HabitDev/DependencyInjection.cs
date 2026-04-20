@@ -4,10 +4,12 @@ using HabitDev.Configurations;
 using HabitDev.Database;
 using HabitDev.Database.Entities;
 using HabitDev.DTOs.Habits;
+using HabitDev.Entities;
 using HabitDev.Helpers;
 using HabitDev.Migrations;
 using HabitDev.Services;
 using HabitDev.Services.Sorting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
@@ -29,7 +31,8 @@ public static  class DependencyInjection
             .AddOpenTelemetry(configuration, environment)
             .AddDatabase(configuration)
             .AddServices()
-            .AddValidators();
+            .AddValidators()
+            .AddAuthenticationServices();
 
 
     private static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration,
@@ -138,7 +141,12 @@ public static  class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString,
-                npgsqlOptions => npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName))
+                npgsqlOptions => npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName , schema:Schemas.Application))
+        );
+        
+        services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            options.UseNpgsql(connectionString,
+                npgsqlOptions => npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName , Schemas.Identity))
         );
         return services;
     }
@@ -161,6 +169,15 @@ public static  class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddTransient<LinkService>();
         services.AddTransient<GenerateLinksService>();
+        return services;
+    }
+
+    private static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
+    {
+        services
+            .AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
         return services;
     }
 }

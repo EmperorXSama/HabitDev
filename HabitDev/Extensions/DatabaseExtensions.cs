@@ -9,11 +9,14 @@ public static class DatabaseExtensions
     {
         using IServiceScope scope = app.Services.CreateScope();
         await using ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await using ApplicationIdentityDbContext identityDbContext = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
 
         try
         {
             await dbContext.Database.MigrateAsync();
-            app.Logger.LogInformation("database migration successfully applied.");
+            app.Logger.LogInformation("application migration successfully applied.");
+            await identityDbContext.Database.MigrateAsync();
+            app.Logger.LogInformation("identity migration successfully applied.");
         }
         catch (Exception e)
         {

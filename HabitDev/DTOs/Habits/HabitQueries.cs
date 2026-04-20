@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using HabitDev.Database.Entities;
+using HabitDev.Entities;
 
 namespace HabitDev.DTOs.Habits;
 

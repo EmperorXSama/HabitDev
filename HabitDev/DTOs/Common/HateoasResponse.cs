@@ -6,3 +6,4 @@ public class HateoasResponse<T>
     public List<LinkDto> Links { get; set; } = [];
 
 }
+  
