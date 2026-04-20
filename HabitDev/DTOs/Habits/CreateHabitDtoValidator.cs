@@ -30,7 +30,7 @@ public sealed class CreateHabitDtoValidator : AbstractValidator<CreateHabitDto>
             .WithMessage("Invalid Type ");
         
         
-        RuleFor(x => x.Frequency)
+        RuleFor(x => x.Frequency.Type)
             .IsInEnum()
             .WithMessage("Invalid frequency period");
         

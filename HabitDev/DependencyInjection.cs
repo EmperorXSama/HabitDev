@@ -4,6 +4,9 @@ using HabitDev.Configurations;
 using HabitDev.Database;
 using HabitDev.Database.Entities;
 using HabitDev.DTOs.Habits;
+using HabitDev.Helpers;
+using HabitDev.Migrations;
+using HabitDev.Services;
 using HabitDev.Services.Sorting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -152,8 +155,12 @@ public static  class DependencyInjection
     {
         services.AddSingleton<ISortMappingDefinition, SortMappingDefinition<HabitDto, Habit>>(_ =>
             HabitMappings.SortMapping);
-
+    
         services.AddTransient<SortMappingProvider>();
+
+        services.AddHttpContextAccessor();
+        services.AddTransient<LinkService>();
+        services.AddTransient<GenerateLinksService>();
         return services;
     }
 }

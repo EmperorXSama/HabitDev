@@ -1,6 +1,9 @@
 using HabitDev;
 using HabitDev.Extensions;
 using HabitDev.Middleware;
+using HabitDev.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,15 @@ builder.Services.AddControllers(options =>
 { options.ReturnHttpNotAcceptable = true; })
 .AddNewtonsoftJson()
 .AddXmlSerializerFormatters();
+builder.Services.Configure<MvcOptions>(options =>
+{
+    NewtonsoftJsonOutputFormatter formatter = options.OutputFormatters.OfType<NewtonsoftJsonOutputFormatter>()
+        .First();
+
+
+    formatter.SupportedMediaTypes.Add(CustomMediaTypeNames.Application.HateoasJson);
+});
+
 builder.Services.AddProblemDetails(options =>
 {
     options.CustomizeProblemDetails = context =>
