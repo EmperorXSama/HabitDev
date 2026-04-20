@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using DevHabit.Api.DTOs.Tags;
 using HabitDev.Database.Entities;
+using HabitDev.DTOs.Tags;
 
 namespace DevHabit.Api.DTOs.Habits;
 
