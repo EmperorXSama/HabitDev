@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using HabitDev.DTOs.Common;
+using HabitDev.Helpers;
+using HabitDev.Migrations;
+using HabitDev.Services;
 using HabitDev.Services.Sorting;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
@@ -18,8 +21,10 @@ namespace HabitDev.Controllers;
 
 [ApiController]
 [Route("Habits")]
-public sealed  class HabitsController(ApplicationDbContext context) : ControllerBase
+public sealed  class HabitsController(ApplicationDbContext context , GenerateLinksService generateLinksService) : ControllerBase
 {
+    public static readonly  string Name = nameof(HabitsController).Replace("Controller", string.Empty);
+    
     [HttpGet]
     public async Task<ActionResult<PaginationResponse<HabitDto>>> GetHabits(
         [FromQuery] HabitQueryParameter queryParameter,
@@ -45,29 +50,60 @@ public sealed  class HabitsController(ApplicationDbContext context) : Controller
             .Select(HabitQueries.ProjectToDto());
 
 
+        bool includeLinks = queryParameter.Accept == CustomMediaTypeNames.Application.HateoasJson;
+        if (includeLinks)
+        {
+            var pagedResult = 
+                await PaginationResponse<HabitDto>.CreateAsync(
+                    habitsQuery,
+                    queryParameter.Page,
+                    queryParameter.PageSize,
+                    generateLinksService.WrapHabitWithLinks
+                );
 
-        var paginationResult =await PaginationResponse<HabitDto>.CreateAsync(
-            habitsQuery,
-            queryParameter.Page,
-            queryParameter.PageSize
-        );
-        return Ok(paginationResult);
+            pagedResult.Links = generateLinksService.CreateLinksForHabitCollection(
+                queryParameter,
+                pagedResult.HasPreviousPage,
+                pagedResult.HasNextPage);
+
+            return Ok(pagedResult);
+        }
+        else
+        {
+            var pagedResult = 
+                await PaginationResponse<HabitDto>.CreateAsync(
+                    habitsQuery,
+                    queryParameter.Page,
+                    queryParameter.PageSize
+                );
+
+            return Ok(pagedResult);
+        }
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<DetailedHabit>> GetHabit(string id)
+    public async Task<ActionResult<HateoasResponse<DetailedHabit>>> GetHabit(string id , [FromHeader(Name = "Accept")] string? accept)
     {
         DetailedHabit habit = await context.
             Habits
             .Where(h => h.Id == id)
             .Select(HabitQueries.ProjectToDetailedDto())
             .FirstOrDefaultAsync();
-
-        return habit == null ? NotFound() : Ok(habit);
+        if (habit == null)
+        {
+            return NotFound();
+        }
+        var response = new HateoasResponse<DetailedHabit>
+        {
+            Data = habit,
+            Links = accept == CustomMediaTypeNames.Application.HateoasJson ? generateLinksService.CreateLinksForHabit(id) : []
+        };
+        return Ok(response);
+       
     }
     
     [HttpPost]
-    public async Task<ActionResult<HabitDto>> CreateHabit( CreateHabitDto habitDto,
+    public async Task<ActionResult<HateoasResponse<HabitDto>>> CreateHabit( CreateHabitDto habitDto,
         [FromServices] IValidator<CreateHabitDto> validator)
     {
         await validator.ValidateAndThrowAsync(habitDto);
@@ -77,7 +113,12 @@ public sealed  class HabitsController(ApplicationDbContext context) : Controller
 
         await context.SaveChangesAsync();
         HabitDto habitdto = habit.ToDto();
-        return CreatedAtAction(nameof(GetHabit), new { id = habitdto.Id }, habitDto);
+        var response = new HateoasResponse<HabitDto>
+        {
+            Data = habitdto,
+            Links =generateLinksService.CreateLinksForHabit(habitdto.Id)
+        };
+        return CreatedAtAction(nameof(GetHabit), new { id = habitdto.Id }, response);
     }
 
     [HttpPut("{id}")]
