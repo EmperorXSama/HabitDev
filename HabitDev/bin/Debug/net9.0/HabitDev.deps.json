@@ -24,7 +24,8 @@
           "OpenTelemetry.Instrumentation.EntityFrameworkCore": "1.15.0-beta.1",
           "OpenTelemetry.Instrumentation.Http": "1.15.0",
           "OpenTelemetry.Instrumentation.Process": "1.15.0-beta.1",
-          "OpenTelemetry.Instrumentation.Runtime": "1.15.0"
+          "OpenTelemetry.Instrumentation.Runtime": "1.15.0",
+          "System.Linq.Dynamic.Core": "1.7.2"
         },
         "runtime": {
           "HabitDev.dll": {}
@@ -811,6 +812,14 @@
           }
         }
       },
+      "System.Linq.Dynamic.Core/1.7.2": {
+        "runtime": {
+          "lib/net9.0/System.Linq.Dynamic.Core.dll": {
+            "assemblyVersion": "1.7.2.0",
+            "fileVersion": "1.7.2.0"
+          }
+        }
+      },
       "System.Text.Json/9.0.15": {
         "runtime": {
           "lib/net9.0/System.Text.Json.dll": {
@@ -1197,6 +1206,13 @@
       "sha512": "sha512-0KdBK+h7G13PuOSC2R/DalAoFMvdYMznvGRuICtkdcUMXgl/gYXsG6z4yUvTxHSMACorWgHCU1Faq0KUHU6yAQ==",
       "path": "system.diagnostics.diagnosticsource/10.0.0",
       "hashPath": "system.diagnostics.diagnosticsource.10.0.0.nupkg.sha512"
+    },
+    "System.Linq.Dynamic.Core/1.7.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-11SGBy8DCywOVElSs2J+Cd4WFHruFrBnaaQ86q2HWHBGcCAQDLnbA0ivpFvMeXGPqcEPE+Q3HZtXaXN4F8JLQg==",
+      "path": "system.linq.dynamic.core/1.7.2",
+      "hashPath": "system.linq.dynamic.core.1.7.2.nupkg.sha512"
     },
     "System.Text.Json/9.0.15": {
       "type": "package",

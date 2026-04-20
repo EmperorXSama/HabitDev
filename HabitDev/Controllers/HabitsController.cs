@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 using FluentValidation;
 using HabitDev.Database;
 using HabitDev.Database.Entities;
@@ -7,6 +8,8 @@ using HabitDev.DTOs.Habits;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+using HabitDev.Services.Sorting;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace HabitDev.Controllers;
@@ -17,10 +20,27 @@ namespace HabitDev.Controllers;
 public sealed  class HabitsController(ApplicationDbContext context) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<HabitDto>> GetHabits()
+    public async Task<ActionResult<HabitDto>> GetHabits(
+        [FromQuery] HabitQueryParameter queryParameter,
+        [FromServices] SortMappingProvider sortMappingProvider)
     {
-        List<HabitDto> habits = await context.
-            Habits
+        if (!sortMappingProvider.ValidateMappings<HabitDto,Habit>(queryParameter.Sort))
+        {
+            return Problem(
+                statusCode: StatusCodes.Status400BadRequest,
+                detail: $"the provided sort parameter isn't valid : ' {queryParameter.Sort}'"
+            );
+        }
+        queryParameter.Search ??= queryParameter.Search?.Trim().ToLower();
+
+        SortMapping[] sortMappings = sortMappingProvider.GetMappings<HabitDto, Habit>();
+        List<HabitDto> habits = await context.Habits
+            .Where(h => queryParameter.Search == null ||
+                        h.Name.ToLower().Contains(queryParameter.Search)
+                        || h.Description != null && h.Description.ToLower().Contains(queryParameter.Search))
+            .Where(h => queryParameter.Status == null  || h.Status ==  queryParameter.Status)
+            .ApplySort(queryParameter.Sort,sortMappings)
+            .Where(h =>  queryParameter.Type == null ||   queryParameter.Type == h.Type)
             .Select(HabitQueries.ProjectToDto())
             .ToListAsync();
 

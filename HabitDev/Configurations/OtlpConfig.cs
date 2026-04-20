@@ -4,7 +4,7 @@ namespace HabitDev.Configurations;
 
 public class OtlpConfig
 {
-    public const string SectionName = "Otlp";
+    public const string SectionName = "Otel";
 
     [Required]
     [Url]

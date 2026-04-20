@@ -2,6 +2,9 @@
 using FluentValidation;
 using HabitDev.Configurations;
 using HabitDev.Database;
+using HabitDev.Database.Entities;
+using HabitDev.DTOs.Habits;
+using HabitDev.Services.Sorting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
@@ -22,6 +25,7 @@ public static  class DependencyInjection
             .AddConfigurationOptions(configuration)
             .AddOpenTelemetry(configuration, environment)
             .AddDatabase(configuration)
+            .AddServices()
             .AddValidators();
 
 
@@ -73,7 +77,6 @@ public static  class DependencyInjection
                     })
                     .AddHttpClientInstrumentation(opts => opts.RecordException = true)
                     .AddEntityFrameworkCoreInstrumentation()
-                    .AddNpgsql()
                     .AddOtlpExporter(opts =>
                     {
                         opts.Endpoint = new Uri(otlpConfig.Endpoint);
@@ -111,6 +114,7 @@ public static  class DependencyInjection
                 opts.AddOtlpExporter(exporter =>
                 {
                     exporter.Endpoint = new Uri(otlpConfig.Endpoint);
+                    exporter.Protocol = OtlpExportProtocol.Grpc;
                 });
             });
         });
@@ -142,6 +146,14 @@ public static  class DependencyInjection
             .Bind(configuration.GetSection(OtlpConfig.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+        return services;
+    }
+    private  static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddSingleton<ISortMappingDefinition, SortMappingDefinition<HabitDto, Habit>>(_ =>
+            HabitMappings.SortMapping);
+
+        services.AddTransient<SortMappingProvider>();
         return services;
     }
 }
