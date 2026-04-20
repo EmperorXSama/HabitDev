@@ -1,5 +1,6 @@
 ﻿using DevHabit.Api.DTOs.Tags;
 using HabitDev.Database.Entities;
+using HabitDev.Entities;
 
 namespace HabitDev.DTOs.Habits;
 

@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Reflection;
 using HabitDev.Database.Entities;
+using HabitDev.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HabitDev.Database;
@@ -11,6 +12,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<Habit> Habits { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<HabitTag> HabitTags { get; set; }
+    public DbSet<User> Users { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Application);

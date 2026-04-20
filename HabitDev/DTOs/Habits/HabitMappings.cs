@@ -1,5 +1,6 @@
 ﻿using DevHabit.Api.DTOs.Habits;
 using HabitDev.Database.Entities;
+using HabitDev.Entities;
 using HabitDev.Services.Sorting;
 
 namespace HabitDev.DTOs.Habits;

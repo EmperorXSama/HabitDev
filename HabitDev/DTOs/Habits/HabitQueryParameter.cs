@@ -1,4 +1,5 @@
 ﻿using HabitDev.Database.Entities;
+using HabitDev.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HabitDev.DTOs.Habits;
